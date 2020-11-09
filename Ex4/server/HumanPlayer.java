@@ -33,6 +33,9 @@ public class HumanPlayer extends Player {
 	protected void makeMove() throws IOException {
 		int row, col;
 		
+		//Send a busy message to other player
+		getOpponent().socketOut.println("It is " + this.getName() + "'s turn, please wait...");
+		
 		while (true) {
 			socketOut.println(this.getName() + ", what row should your next " + this.getMark() + " be placed in?");
 			socketOut.println("...");

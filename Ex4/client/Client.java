@@ -88,12 +88,12 @@ public class Client {
 	}
 	
 	public static void main (String [] args) throws IOException {
-		System.out.println("Enter port number to connect : ");
+		System.out.println("Press ENTER to connect to the game server.");
 		
 		BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
-		String portNum = stdin.readLine();
+		stdin.readLine();
 		
-		Client aClient = new Client ("localhost", Integer.parseInt(portNum));
+		Client aClient = new Client ("localhost", 9898);
 		
 		aClient.communicate();
 	}

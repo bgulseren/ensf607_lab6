@@ -16,8 +16,8 @@ import java.io.*;
 
 public class Game implements Constants {
 
-	private Socket [] aSocket;
-	private ServerSocket [] serverSocket;
+	//private Socket [] aSocket;
+	private ServerSocket serverSocket;
 	private PrintWriter [] socketOut;
 	private BufferedReader [] socketIn;
 	
@@ -33,10 +33,8 @@ public class Game implements Constants {
 	 */
 	public Game() {
 		try {
-			aSocket = new Socket[2];
-			serverSocket = new ServerSocket[2];
-			serverSocket[0] = new ServerSocket(9898);
-			serverSocket[1] = new ServerSocket(9899);
+			//aSocket = new Socket[2];
+			serverSocket = new ServerSocket(9898);
 			
 			socketIn = new BufferedReader[2];
 			socketOut = new PrintWriter[2];
@@ -75,11 +73,36 @@ public class Game implements Constants {
 		
 		//Establishing the connection 
 		try {
-			for (int i = 0; i < 2; i++) {
-				myServer.aSocket[i] = myServer.serverSocket[i].accept();
-				System.out.println("Server console: Connection accepted by the server!");
-				myServer.socketIn[i] = new BufferedReader (new InputStreamReader(myServer.aSocket[i].getInputStream()));
-				myServer.socketOut[i] = new PrintWriter (myServer.aSocket[i].getOutputStream(), true);
+			
+			Socket xSocket = new Socket();
+			try {
+				xSocket = myServer.serverSocket.accept();
+			} catch (IOException e) {
+				System.out.println("x socket failed");
+			}
+			
+			System.out.println("First player joined!");
+			
+			if (xSocket.isConnected()) {
+				myServer.socketIn[0] = new BufferedReader (new InputStreamReader(xSocket.getInputStream()));
+				myServer.socketOut[0] = new PrintWriter (xSocket.getOutputStream(), true);
+			}
+			myServer.socketOut[0].println("Waiting for the second player...");
+			
+			
+			Socket oSocket = new Socket();
+			try {
+				oSocket = myServer.serverSocket.accept();
+			} catch (IOException e) {
+				System.out.println("o socket failed");
+			}
+			System.out.println("Second player joined!");
+			myServer.socketOut[0].println("Second player joined.");
+			
+			if (oSocket.isConnected()) {
+				
+				myServer.socketIn[1] = new BufferedReader (new InputStreamReader(oSocket.getInputStream()));
+				myServer.socketOut[1] = new PrintWriter (oSocket.getOutputStream(), true);
 			}
 			
 			System.out.println("Server console: Both connections done!");
@@ -93,6 +116,11 @@ public class Game implements Constants {
 			pChar[1] = LETTER_X;
 			
 			for (int i = 0; i < 2; i++) {
+				int j = 0;
+				if (i == 0)
+					j = 1;
+				myServer.socketOut[j].println("Waiting for other player to enter their name...");
+				
 				myServer.socketOut[i].println("Please enter your name: ");
 				System.out.println("Name request sent");
 				name[i] = myServer.socketIn[i].readLine();
@@ -113,10 +141,13 @@ public class Game implements Constants {
 	        
 			myServer.appointReferee(theRef);
 			
+			xSocket.close();
+			oSocket.close();
 			myServer.socketIn[0].close();
 			myServer.socketIn[1].close();
 			myServer.socketOut[0].close();
 			myServer.socketOut[1].close();
+
 			
 			System.out.println("Server console: Game ended, server closed");
 			

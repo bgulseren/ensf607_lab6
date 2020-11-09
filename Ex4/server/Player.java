@@ -47,9 +47,9 @@ public abstract class Player {
 			
 			if (this.board.xWins() && this.getMark() == 'X') {
 				socketOut.println("You won!");
-				this.opponent.getSocketOut().println("You lost!");
+				this.opponent.getSocketOut().println("You lost! " + getName() + " won!");
 			} else {
-				socketOut.println("You lost!");
+				socketOut.println("You lost! " + this.opponent.getName() + " won!");
 				this.opponent.getSocketOut().println("You won!");
 			}
 			socketOut.println("GAME OVER");
