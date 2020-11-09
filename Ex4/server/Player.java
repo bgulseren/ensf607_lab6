@@ -33,41 +33,6 @@ public abstract class Player {
 		this.socketIn = socketIn;
 		this.socketOut = socketOut;
 	}
-
-	/**
-	 * Checks whether player can play or not. If player can play, calls the makeMove method
-	 * and then passes the turn to the next player. Otherwise, it outputs the result of the
-	 * game (winner or tie) to the console.
-	 *
-	 * @throws IOException Downstream Player makeMove method uses standard input to read lines
-	 * from the CLI, which can throw an exception.
-	 */
-	public void play() throws IOException {
-		if (this.board.xWins() || this.board.oWins()) {
-			
-			if (this.board.xWins() && this.getMark() == 'X') {
-				socketOut.println("You won!");
-				this.opponent.getSocketOut().println("You lost! " + getName() + " won!");
-			} else {
-				socketOut.println("You lost! " + this.opponent.getName() + " won!");
-				this.opponent.getSocketOut().println("You won!");
-			}
-			socketOut.println("GAME OVER");
-			this.opponent.getSocketOut().println("GAME OVER");
-			
-		} else if (this.board.isFull()) {
-			socketOut.println("Game is tie...");
-			this.opponent.getSocketOut().println("Game is tie...");
-			
-			socketOut.println("GAME OVER");
-			this.opponent.getSocketOut().println("GAME OVER");
-		}
-		else { //still empty tiles and no one won yet
-			this.makeMove();
-			this.board.display(this.opponent.getSocketOut());
-			this.opponent.play();
-		}
-	}
 	
 	/**
 	 * Abstract makeMove implementation
@@ -139,6 +104,15 @@ public abstract class Player {
 	 */
 	public PrintWriter getSocketOut() {
 		return socketOut;
+	}
+	
+	/**
+	 * Returns the socket in for this player
+	 *
+	 * @return the socket in for this player
+	 */
+	public BufferedReader getSocketIn() {
+		return socketIn;
 	}
 	
 }

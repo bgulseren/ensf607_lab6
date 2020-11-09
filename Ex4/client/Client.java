@@ -40,7 +40,13 @@ public class Client {
 			}
 			
 			line = stdIn.readLine();
+			while (line.equals("") || line == null) {
+				System.out.println("Name cannot be empty!");
+				System.out.println("Please enter your name: ");
+				line = stdIn.readLine();
+			}
 			socketOut.println(line);
+			
 			
 			while (!finished) {
 				

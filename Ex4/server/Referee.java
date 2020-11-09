@@ -8,7 +8,7 @@ import java.io.IOException;
  * @since October 19th, 2020
  */
 
-public class Referee {
+public class Referee implements Runnable {
 	/** the player object which will place the X marks */
 	private Player xPlayer;
 	/** the player object which will place the O marks */
@@ -16,12 +16,18 @@ public class Referee {
 	/** the board object assigned to this referee */
 	private Board board;
 	
+	/** game still in progress */
+	private boolean inProgress;
+	
 	/**
 	 * Default Referee constructor
 	 *
 	 */
-	public Referee() {
-		
+	public Referee(Player oPlayer, Player xPlayer) {
+		board = new Board();
+		setoPlayer(oPlayer);
+		setxPlayer(xPlayer);
+		inProgress = true;
 	}
 
 	/**
@@ -32,11 +38,57 @@ public class Referee {
 	 * @throws IOException Downstream Player makeMove method uses standard input to read lines
 	 * from the CLI, which can throw an exception.
 	 */
-	public void runTheGame() throws IOException {
+	@Override
+	public void run() {
+		this.xPlayer.setBoard(board);
+		this.oPlayer.setBoard(board);
+		
 		this.xPlayer.setOpponent(this.oPlayer); //set the opponents of the X-Player
 		this.oPlayer.setOpponent(this.xPlayer); //set the opponents of the O-Player
-		this.board.display(this.xPlayer.getSocketOut()); //initiates the game by displaying the board
-		this.xPlayer.play(); //Start with X-Player who is always the first player
+		
+		
+		while (inProgress) {
+			try {
+				this.board.display(this.xPlayer.getSocketOut());
+				this.xPlayer.makeMove();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			if (this.board.xWins()) {
+				
+				xPlayer.getSocketOut().println("You won!");
+				oPlayer.getSocketOut().println("You lost! " + xPlayer.getName() + " won!");
+				endGame();
+				
+			} else if (this.board.isFull()) {
+				xPlayer.getSocketOut().println("Game is tie...");
+				oPlayer.getSocketOut().println("Game is tie...");
+				endGame();
+				
+			} else {
+			
+				try {
+					this.board.display(this.oPlayer.getSocketOut());
+					this.oPlayer.makeMove();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				if (this.board.oWins()) {
+					
+					oPlayer.getSocketOut().println("You won!");
+					xPlayer.getSocketOut().println("You lost! " + oPlayer.getName() + " won!");
+					endGame();
+					
+				} else if (this.board.isFull()) {
+					xPlayer.getSocketOut().println("Game is tie...");
+					oPlayer.getSocketOut().println("Game is tie...");
+					endGame();
+				}
+			}
+		}
+			
 	}
 	
 	/**
@@ -64,6 +116,22 @@ public class Referee {
 	 */
 	public void setxPlayer(Player p) {
 		this.xPlayer = p;
+	}
+	
+	public void endGame() {
+		inProgress = false;
+		xPlayer.getSocketOut().println("GAME OVER");
+		oPlayer.getSocketOut().println("GAME OVER");
+		
+		try {
+			oPlayer.getSocketIn().close();
+			oPlayer.getSocketIn().close();
+			xPlayer.getSocketOut().close();
+			xPlayer.getSocketOut().close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 }
