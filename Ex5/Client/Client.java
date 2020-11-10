@@ -11,11 +11,18 @@ public class Client {
 	private BufferedReader socketIn;
 	private ClientGUI theGui;
 	
+	/**
+	 * Default constructor
+	 */
 	public Client () {
 		theGui = new ClientGUI();
 	}
 	
-	
+	/**
+	 * Starts the connection with the server
+	 * @param serverName ip address of the server
+	 * @param portNumber portnumber to connect
+	 */
 	public void connect (String serverName, int portNumber) {
 		try {
 			aSocket = new Socket (serverName, portNumber);
@@ -30,6 +37,9 @@ public class Client {
 	}
 	
 	
+	/**
+	 * Starts the communication with the server
+	 */
 	public void communicate () {
 		String line = "";
 		String response = "";
@@ -107,6 +117,9 @@ public class Client {
 		
 	}
 	
+	/**
+	 * Closes all the sockets when game terminates
+	 */
 	private void closeSocket () {
 		
 		try {
@@ -118,7 +131,9 @@ public class Client {
 		
 	}
 	
-	
+	/**
+	 * Main
+	 */
 	public static void main (String [] args) throws IOException {
 		System.out.println("Press ENTER to connect to the game server.");
 		
