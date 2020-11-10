@@ -5,6 +5,13 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+/**
+ * 
+ * @author B.Gulseren, K.Behairy
+ * @version 1.0
+ * @since October 27th, 2020
+ */
+
 public class Client {
 	
 	private Socket aSocket;
@@ -12,6 +19,11 @@ public class Client {
 	private BufferedReader socketIn;
 	private BufferedReader stdIn;
 	
+	/**
+	 * Default constructor
+	 * @param serverName ip address of the server
+	 * @param portNumber portnumber to connect
+	 */
 	public Client (String serverName, int portNumber) {
 		
 		try {
@@ -27,7 +39,9 @@ public class Client {
 		}
 	}
 	
-	
+	/**
+	 * Starts the communication with the server
+	 */
 	public void communicate () {
 		String line = "";
 		String response = "";
@@ -81,6 +95,9 @@ public class Client {
 		
 	}
 	
+	/**
+	 * Closes all the sockets when game terminates
+	 */
 	private void closeSocket () {
 		
 		try {
@@ -93,6 +110,9 @@ public class Client {
 		
 	}
 	
+	/**
+	 * Main
+	 */
 	public static void main (String [] args) throws IOException {
 		System.out.println("Press ENTER to connect to the game server.");
 		

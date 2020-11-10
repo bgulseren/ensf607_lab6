@@ -4,6 +4,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * 
+ * @author B.Gulseren, K.Behairy
+ * @version 1.0
+ * @since October 27th, 2020
+ */
+
 public class Client {
 	
 	private Socket aSocket;

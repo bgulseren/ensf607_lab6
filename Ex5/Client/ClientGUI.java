@@ -4,7 +4,13 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 
- 
+/**
+ * 
+ * @author B.Gulseren, K.Behairy
+ * @version 1.0
+ * @since October 27th, 2020
+ */
+
 // An AWT GUI program inherits the top-level container java.awt.Frame
 public class ClientGUI extends JFrame implements ActionListener {
 	
