@@ -25,8 +25,6 @@ public class Game implements Constants {
 	private PrintWriter [] socketOut;
 	private BufferedReader [] socketIn;
 	
-	/** the referee object which will conduct (consist the backend) the game */
-	private Referee theRef;
 	
 	/**
 	 * Game Class Constructor, instantiates a new board to be played on.
