@@ -109,6 +109,7 @@ public class ClientGUI extends JFrame implements ActionListener {
 				row = i / 3;
 				col = i % 3;
 				clicked = true;
+				btns[i].setText(playerMark.getText());
 			}
 		}
 		
