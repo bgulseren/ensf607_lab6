@@ -125,10 +125,13 @@ public class ClientGUI extends JFrame implements ActionListener {
 	 */
 	public void updateGrids(String gridMarks) {
 		for (int i = 0; i < 9; i++) {
+			btns[i].setText(String.valueOf(gridMarks.charAt(i)));
 			if (gridMarks.charAt(i) == 'X' || gridMarks.charAt(i) == 'O') {
 				btns[i].setEnabled(false); //if occupied, lock the button
+			
+			} else {
+				btns[i].setEnabled(true); //if not occupied, unlock the button
 			}
-			btns[i].setText(String.valueOf(gridMarks.charAt(i)));
 		}
 	}
 	

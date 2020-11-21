@@ -48,7 +48,6 @@ public class Client {
 	 * Starts the communication with the server
 	 */
 	public void communicate () {
-		String line = "";
 		String response = "";
 		boolean finished = false;
 
@@ -57,6 +56,7 @@ public class Client {
 				response = socketIn.readLine();  //read response form the socket
 				theGui.updateMessage("\n" + response);
 				System.out.println(response);
+				theGui.lockButtons(true);
 			}
 			
 			while (true) {
@@ -83,7 +83,7 @@ public class Client {
 			System.out.println("mark received");
 		
 			while (!finished) {
-				theGui.lockButtons(true);
+				
 				response = socketIn.readLine();  //read response form the socket
 				theGui.updateMessage("\n" + response);
 				
@@ -97,7 +97,6 @@ public class Client {
 					theGui.updateMessage("\n" + response);
 					
 				} else if (response.equals("...waiting user input...")) {
-					theGui.lockButtons(false);
 					
 					boolean clicked = false;
 					
@@ -108,6 +107,7 @@ public class Client {
 							
 							socketOut.println(theGui.getRow());
 							socketOut.println(theGui.getCol());
+							theGui.lockButtons(true);
 							break;
 						}
 					}
